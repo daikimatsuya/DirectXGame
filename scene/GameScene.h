@@ -43,9 +43,13 @@ public: // メンバ関数
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
+	ViewProjection viewPlojection_;
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	Player* player_ = nullptr;
+	Model* model_ = nullptr;
+	uint32_t textuerHandle_=0;
+
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

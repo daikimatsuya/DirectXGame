@@ -4,7 +4,10 @@
 
 GameScene::GameScene() {}
 
-GameScene::~GameScene() {}
+GameScene::~GameScene() { 
+	delete player_;
+	delete model_;
+}
 
 void GameScene::Initialize() {
 
@@ -12,7 +15,11 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	player_ = new Player();
-	//player_->Initialize();
+	model_ = Model::Create();
+	viewPlojection_.Initialize();
+	textuerHandle_ = TextureManager::Load("picture/mario.png");
+	player_->Initialize(model_,textuerHandle_);
+	
 }
 
 void GameScene::Update() { 
@@ -45,7 +52,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
-	player_->Draw();
+	player_->Draw(viewPlojection_);
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
