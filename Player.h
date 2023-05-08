@@ -2,6 +2,8 @@
 
 #include "Model.h"
 #include "WorldTransform.h"
+#include "Input.h"
+#include "AffineMatrixFunctions.h"
 
 
 class Player {
@@ -17,5 +19,7 @@ private:
 	ViewProjection viewProjection_;
 	Model* model_ = nullptr;
 	uint32_t tectureHandle_ = 0u;
+	Input* input_ = nullptr;
+	AffineMatrixFunctions* AMF_ = nullptr;
 };
 
