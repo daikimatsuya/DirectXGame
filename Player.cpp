@@ -2,6 +2,7 @@
 #include <cassert>
 #include "Input.h"
 #include "AffineMatrixFunctions.h"
+#include "ImGuiManager.h"
 
 
 Player::Player() {
@@ -37,6 +38,19 @@ void Player::Update() {
 	}
 	worldTrasform_.translation_.y += move.y;
 	worldTrasform_.translation_.x += move.x;
+
+	inputFloat[0] = worldTrasform_.translation_.x;
+	inputFloat[1] = worldTrasform_.translation_.y;  
+	inputFloat[2] = worldTrasform_.translation_.z;
+
+	ImGui::Begin("Player");
+	ImGui::SliderFloat3("Player", inputFloat, -100, 100);
+	ImGui::End();
+
+	worldTrasform_.translation_.x = inputFloat[0];
+	worldTrasform_.translation_.y = inputFloat[1];
+	worldTrasform_.translation_.z = inputFloat[2];
+
 	worldTrasform_.matWorld_= AMF_->MakeAffinMatrix(
 													AMF_->MakeScaleMatrix(worldTrasform_.scale_),
 													AMF_->MakeRotateMatrix(
@@ -44,7 +58,8 @@ void Player::Update() {
 														  AMF_->MakeRotateYMatrix(worldTrasform_.rotation_.y),
 														  AMF_->MakeRotateZMatrix(worldTrasform_.rotation_.z)),
 													AMF_->MakeTranslateMatrix(worldTrasform_.translation_));
-
+	
+	
 }
 
 void Player::Draw(ViewProjection viewProjection) { 

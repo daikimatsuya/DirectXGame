@@ -21,5 +21,6 @@ private:
 	uint32_t tectureHandle_ = 0u;
 	Input* input_ = nullptr;
 	AffineMatrixFunctions* AMF_ = nullptr;
+	float inputFloat[3] = {};
 };
 
