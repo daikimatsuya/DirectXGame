@@ -43,6 +43,10 @@ void Player::Update() {
 	inputFloat[1] = worldTrasform_.translation_.y;  
 	inputFloat[2] = worldTrasform_.translation_.z;
 
+	const float MoveLimitX = 30;
+	const float MoveLimitY = 15;
+
+
 	ImGui::Begin("Player");
 	ImGui::SliderFloat3("Player", inputFloat, -100, 100);
 	ImGui::End();
@@ -50,6 +54,11 @@ void Player::Update() {
 	worldTrasform_.translation_.x = inputFloat[0];
 	worldTrasform_.translation_.y = inputFloat[1];
 	worldTrasform_.translation_.z = inputFloat[2];
+
+	worldTrasform_.translation_.x = max(worldTrasform_.translation_.x, -MoveLimitX);
+	worldTrasform_.translation_.x = min(worldTrasform_.translation_.x, +MoveLimitX);
+	worldTrasform_.translation_.y = max(worldTrasform_.translation_.y, -MoveLimitY);
+	worldTrasform_.translation_.y = min(worldTrasform_.translation_.y, +MoveLimitY);
 
 	worldTrasform_.matWorld_= AMF_->MakeAffinMatrix(
 													AMF_->MakeScaleMatrix(worldTrasform_.scale_),
