@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "AffineMatrixFunctions.h"
 #include "ImGuiManager.h"
+#include "PlayerBullet.h"
 
 
 Player::Player() {
@@ -20,9 +21,11 @@ void Player::Initialize(Model* model, uint32_t tectureHandle) {
 	worldTrasform_.Initialize();
 	viewProjection_.Initialize();
 	input_ = Input::GetInstance();
+
 }
 
 void Player::Update() { 
+	
 	worldTrasform_.TransferMatrix();
 	Vector3 move = {0, 0, 0};
 	const float kCharacterSpeed = 0.2f;
@@ -45,7 +48,7 @@ void Player::Update() {
 
 	const float MoveLimitX = 30;
 	const float MoveLimitY = 15;
-
+	Rotate();
 
 	ImGui::Begin("Player");
 	ImGui::SliderFloat3("Player", inputFloat, -100, 100);
@@ -60,18 +63,38 @@ void Player::Update() {
 	worldTrasform_.translation_.y = max(worldTrasform_.translation_.y, -MoveLimitY);
 	worldTrasform_.translation_.y = min(worldTrasform_.translation_.y, +MoveLimitY);
 
-	worldTrasform_.matWorld_= AMF_->MakeAffinMatrix(
-													AMF_->MakeScaleMatrix(worldTrasform_.scale_),
-													AMF_->MakeRotateMatrix(
-														  AMF_->MakeRotateXMatrix(worldTrasform_.rotation_.x),
-														  AMF_->MakeRotateYMatrix(worldTrasform_.rotation_.y),
-														  AMF_->MakeRotateZMatrix(worldTrasform_.rotation_.z)),
-													AMF_->MakeTranslateMatrix(worldTrasform_.translation_));
+
+	worldTrasform_.UpdateMatrix();
 	
+	Attack();
+	if (bullet_) {
 	
+	bullet_->Update();
+	}
 }
 
 void Player::Draw(ViewProjection viewProjection) { 
 	viewProjection_ = viewProjection;
 	model_->Draw(worldTrasform_, viewProjection_, tectureHandle_);
+	if (bullet_) {
+		bullet_->Draw(viewProjection);
+	}
+}
+
+void Player::Rotate() { 
+	const float KRotSpeed = 0.02f; 
+	if (input_->PushKey(DIK_A)) {
+		worldTrasform_.rotation_.y += KRotSpeed;
+	}
+	if (input_->PushKey(DIK_D)) {
+		worldTrasform_.rotation_.y -= KRotSpeed;
+	}
+}
+
+void Player::Attack() { 
+	if (input_->TriggerKey(DIK_Z)) {
+		PlayerBullet* newBullet = new PlayerBullet();
+		newBullet->Initialize(model_, worldTrasform_.translation_);
+		bullet_ = newBullet;
+	}
 }
