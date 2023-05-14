@@ -6,6 +6,8 @@ public:
 	
 	AffineMatrixFunctions();
 	~AffineMatrixFunctions();
+	Vector3 Add(Vector3 v1,Vector3 v2);
+	Vector3 TransformNormal(const Vector3& v, const Matrix4x4& m);
 	Matrix4x4 Multiply(Matrix4x4 m1, Matrix4x4 m2);
 	Matrix4x4 MakeScaleMatrix(Vector3 scale);
 	Matrix4x4 MakeRotateMatrix(Matrix4x4 rotate1,Matrix4x4 rotate2,Matrix4x4 rotate3);
