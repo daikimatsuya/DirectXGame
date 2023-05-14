@@ -5,6 +5,7 @@
 #include "Input.h"
 #include "AffineMatrixFunctions.h"
 #include "PlayerBullet.h"
+#include "list"
 
 
 class Player {
@@ -24,7 +25,7 @@ private:
 	uint32_t tectureHandle_ = 0u;
 	Input* input_ = nullptr;
 	AffineMatrixFunctions* AMF_ = nullptr;
-	PlayerBullet* bullet_ = nullptr;
+	std::list<PlayerBullet*> bullets_;
 	float inputFloat[3] = {};
 };
 

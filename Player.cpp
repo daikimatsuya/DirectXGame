@@ -6,12 +6,15 @@
 #include "PlayerBullet.h"
 
 
+
 Player::Player() {
 
 }
 
-Player::~Player() {
-
+Player::~Player() { 
+	for (PlayerBullet* bullet : bullets_) {
+		delete bullet;
+	}
 }
 
 void Player::Initialize(Model* model, uint32_t tectureHandle) {
@@ -67,17 +70,16 @@ void Player::Update() {
 	worldTrasform_.UpdateMatrix();
 	
 	Attack();
-	if (bullet_) {
-	
-	bullet_->Update();
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Update();
 	}
 }
 
 void Player::Draw(ViewProjection viewProjection) { 
 	viewProjection_ = viewProjection;
 	model_->Draw(worldTrasform_, viewProjection_, tectureHandle_);
-	if (bullet_) {
-		bullet_->Draw(viewProjection);
+	for (PlayerBullet* bullet : bullets_) {
+		bullet->Draw(viewProjection);
 	}
 }
 
@@ -93,8 +95,9 @@ void Player::Rotate() {
 
 void Player::Attack() { 
 	if (input_->TriggerKey(DIK_Z)) {
+		
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTrasform_.translation_);
-		bullet_ = newBullet;
+		bullets_.push_back(newBullet);
 	}
 }
