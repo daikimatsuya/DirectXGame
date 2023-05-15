@@ -12,9 +12,15 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 
 private:
+	enum Phase {
+		Approach,	//接近
+		Leave,		//離脱
+	};
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
-	Vector3 velocity_;
+	Vector3 AproachVelocity_;
+	Vector3 LeaveVelocity_;
 	uint32_t textureHandle_ = 0;
 	AffineMatrixFunctions amf_;
+	Phase phase_ = Approach;
 };

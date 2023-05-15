@@ -20,6 +20,14 @@ Vector3 AffineMatrixFunctions::Add(Vector3 v1, Vector3 v2) {
 	return tmp; 
 }
 
+Vector3 AffineMatrixFunctions::Subtract(Vector3 v1, Vector3 v2) {
+	Vector3 tmp;
+	tmp.x = v1.x -= v2.x;
+	tmp.y = v1.y -= v2.y;
+	tmp.z = v1.z -= v2.z;
+	return tmp;
+}
+
 Vector3 AffineMatrixFunctions::TransformNormal(const Vector3& v, const Matrix4x4& m) {
 	Vector3 result{
 	    v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
