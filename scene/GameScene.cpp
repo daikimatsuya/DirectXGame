@@ -10,6 +10,7 @@ GameScene::~GameScene() {
 	delete player_;
 	delete model_;
 	delete debugCamera_;
+	delete enemy_;
 }
 
 void GameScene::Initialize() {
@@ -18,10 +19,13 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	player_ = new Player();
+	enemy_ = new Enemy();
 	model_ = Model::Create();
 	viewPlojection_.Initialize();
 	textuerHandle_ = TextureManager::Load("picture/mario.png");
+	textureHandleEnemy_ = TextureManager::Load("picture/enemy.png");
 	player_->Initialize(model_,textuerHandle_);
+	enemy_->Initialize(model_, textureHandleEnemy_);
 	debugCamera_ = new DebugCamera(1280, 720);
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewPlojection_);
@@ -29,6 +33,7 @@ void GameScene::Initialize() {
 
 void GameScene::Update() { 
 	player_->Update(); 
+	enemy_->Update();
 
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -77,6 +82,9 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	player_->Draw(viewPlojection_);
+	if (enemy_) {
+		enemy_->Draw(viewPlojection_);
+	}
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 #pragma endregion
