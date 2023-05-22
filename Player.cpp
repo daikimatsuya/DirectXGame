@@ -103,3 +103,11 @@ void Player::Attack() {
 		bullets_.push_back(newBullet);
 	}
 }
+
+Vector3 Player::GetWorldPosition() { 
+	Vector3 worldPos;
+	worldPos.x = worldTrasform_.translation_.x;
+	worldPos.y = worldTrasform_.translation_.y;
+	worldPos.z = worldTrasform_.translation_.z;
+	return worldPos;
+}

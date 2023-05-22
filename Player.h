@@ -17,6 +17,7 @@ public:
 	void Draw(ViewProjection viewProjection);
 	void Rotate();
 	void Attack();
+	Vector3 GetWorldPosition();
 
 private:
 	WorldTransform worldTrasform_;
@@ -27,5 +28,6 @@ private:
 	AffineMatrixFunctions* AMF_ = nullptr;
 	std::list<PlayerBullet*> bullets_;
 	float inputFloat[3] = {};
+	
 };
 

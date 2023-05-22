@@ -3,6 +3,10 @@
 #include "Model.h"
 #include "AffineMatrixFunctions.h"
 #include "Vector3.h"
+#include "list"
+#include "EnemyBullet.h"
+#include "VectorFanctions.h"
+class Player;
 class Enemy {
 public:
 	Enemy();
@@ -10,7 +14,12 @@ public:
 	void Initialize(Model* model,uint32_t textureHandle);
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
+	void Fire();
+	void InitializeBulletPhase();
+	void SetPlayer(Player* player) { player_ = player; };
+	Vector3 GetWorldPosition();
 
+	static const int kInterval = 60;
 private:
 	enum Phase {
 		Approach,	//接近
@@ -18,9 +27,13 @@ private:
 	};
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
-	Vector3 AproachVelocity_;
-	Vector3 LeaveVelocity_;
+	Player* player_ = nullptr;
+	Vector3 AproachVelocity_ = {0,0,0};
+	Vector3 LeaveVelocity_ = {0,0,0};
 	uint32_t textureHandle_ = 0;
 	AffineMatrixFunctions amf_;
+	VectorFanctions vf_;
 	Phase phase_ = Approach;
+	std::list<EnemyBullet*> bullets_;
+	uint32_t intervalTimer = 0;
 };

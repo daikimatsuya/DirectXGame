@@ -20,6 +20,7 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	player_ = new Player();
 	enemy_ = new Enemy();
+	enemy_->SetPlayer(player_);
 	model_ = Model::Create();
 	viewPlojection_.Initialize();
 	textuerHandle_ = TextureManager::Load("picture/mario.png");
