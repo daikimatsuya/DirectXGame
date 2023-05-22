@@ -18,6 +18,7 @@ public:
 	void Rotate();
 	void Attack();
 	Vector3 GetWorldPosition();
+	void OnCollision();
 
 private:
 	WorldTransform worldTrasform_;

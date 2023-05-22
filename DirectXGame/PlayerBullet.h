@@ -8,6 +8,7 @@ public:
 	void Initialize(Model* model, const Vector3& position,const Vector3& velocity);
 	void Update();
 	void Draw(const ViewProjection& viewProjection);
+	void OnCollision();
 
 private:
 	WorldTransform worldTransform_;

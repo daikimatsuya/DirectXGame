@@ -18,6 +18,7 @@ public:
 	void InitializeBulletPhase();
 	void SetPlayer(Player* player) { player_ = player; };
 	Vector3 GetWorldPosition();
+	void OnCollision();
 
 	static const int kInterval = 60;
 private:
