@@ -43,6 +43,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void GetAllColisions();
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	ViewProjection viewPlojection_;

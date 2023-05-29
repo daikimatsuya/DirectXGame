@@ -68,7 +68,13 @@ void Player::Update() {
 
 
 	worldTrasform_.UpdateMatrix();
-	
+	bullets_.remove_if([](PlayerBullet* bullet) { 
+		if (bullet->Isdead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
 	Attack();
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Update();

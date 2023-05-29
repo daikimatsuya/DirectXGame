@@ -18,6 +18,7 @@ public:
 	void InitializeBulletPhase();
 	void SetPlayer(Player* player) { player_ = player; };
 	Vector3 GetWorldPosition();
+	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
 	void OnCollision();
 
 	static const int kInterval = 60;
@@ -37,4 +38,5 @@ private:
 	Phase phase_ = Approach;
 	std::list<EnemyBullet*> bullets_;
 	uint32_t intervalTimer = 0;
+
 };

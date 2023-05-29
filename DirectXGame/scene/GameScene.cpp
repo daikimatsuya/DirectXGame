@@ -35,7 +35,7 @@ void GameScene::Initialize() {
 void GameScene::Update() { 
 	player_->Update(); 
 	enemy_->Update();
-
+	GetAllColisions();
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
 		if (isDebugCameraActive_ == false) {
@@ -102,4 +102,35 @@ void GameScene::Draw() {
 	Sprite::PostDraw();
 
 #pragma endregion
+}
+
+void GameScene::GetAllColisions() { 
+	Vector3 posA, posB; 
+	
+	const std::list<PlayerBullet*>& playerBullets = player_->GetBullets();
+	const std::list<EnemyBullet*>& enemyBullets = enemy_->GetBullets();
+
+	posA = player_->GetWorldPosition();
+	for (EnemyBullet* bullet : enemyBullets) {
+		posB = bullet->GetWorldPosition();
+		float length =
+		    ((posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) +
+		     (posB.z - posA.z) * (posB.z - posA.z));
+		if (length < (1 + 2) * (1 + 2)) {
+			//player_->OnCollision();
+			bullet->OnCollision();
+		}
+	}
+
+	posA = enemy_->GetWorldPosition();
+	for (PlayerBullet* bullet : playerBullets) {
+		posB = bullet->GetWorldPos();
+		float length =
+		    ((posB.x - posA.x) * (posB.x - posA.x) + (posB.y - posA.y) * (posB.y - posA.y) +
+		     (posB.z - posA.z) * (posB.z - posA.z));
+		if (length < (1 + 2) * (1 + 2)) {
+			//enemy_->OnCollision();
+			bullet->OnCollision();
+		}
+	}
 }

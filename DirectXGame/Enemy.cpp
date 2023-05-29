@@ -48,6 +48,13 @@ switch (phase_) {
 		Fire();
 		intervalTimer = kInterval;
 	}
+	bullets_.remove_if([](EnemyBullet* bullet) {
+		if (bullet->Isdead()) {
+			delete bullet;
+			return true;
+		}
+		return false;
+	});
 	for(EnemyBullet*bullet : bullets_) {
 		bullet->Update();	
 	}
