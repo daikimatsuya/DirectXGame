@@ -20,27 +20,32 @@ void Enemy::Initialize(Model* model,uint32_t textureHandle) {
 	AproachVelocity_ = {0, 0, -0.2f};
 	LeaveVelocity_ = {0.0f, 0.0f, +0.2f};
 	InitializeBulletPhase();
-}
-
-void Enemy::Update() { 
-switch (phase_) {
-	case Enemy::Approach:
-	default:
-		Vector3 tmp = amf_.Add(worldTransform_.translation_, AproachVelocity_);
-		worldTransform_.translation_ = tmp;
-		if (worldTransform_.translation_.z < 0.0f) {
-			phase_ = Leave;
-		}		
-		break;
-	case Enemy::Leave:
-		Vector3 tmp2 = amf_.Add(worldTransform_.translation_, LeaveVelocity_);
-		worldTransform_.translation_ = tmp2;
-		if (worldTransform_.translation_.z > 50.0f) {
-			phase_ = Approach;
-		}	
-		break;
 	
-	}
+}
+void (Enemy::*Enemy::MovePhase[])() = {
+	&Enemy::Approach,
+	&Enemy::Leave,
+};
+void Enemy::Update() { 
+//switch (phase_) {
+//	case Enemy::Approach:
+//	default:
+//		Vector3 tmp = amf_.Add(worldTransform_.translation_, AproachVelocity_);
+//		worldTransform_.translation_ = tmp;
+//		if (worldTransform_.translation_.z < 0.0f) {
+//			phase_ = Leave;
+//		}		
+//		break;
+//	case Enemy::Leave:
+//		Vector3 tmp2 = amf_.Add(worldTransform_.translation_, LeaveVelocity_);
+//		worldTransform_.translation_ = tmp2;
+//		if (worldTransform_.translation_.z > 50.0f) {
+//			phase_ = Approach;
+//		}	
+//		break;
+//	
+//	}
+	(this->*MovePhase[phase_])();
 	worldTransform_.UpdateMatrix();
 	
 	intervalTimer -= 1;
@@ -90,4 +95,20 @@ Vector3 Enemy::GetWorldPosition() {
 	worldPos.y = worldTransform_.translation_.y;
 	worldPos.z = worldTransform_.translation_.z;
 	return worldPos;
+}
+
+void Enemy::Leave() {
+	Vector3 tmp2 = amf_.Add(worldTransform_.translation_, LeaveVelocity_);
+		worldTransform_.translation_ = tmp2;
+		if (worldTransform_.translation_.z > 50.0f) {
+		phase_ = 0;
+		}
+}
+
+void Enemy::Approach() {
+	Vector3 tmp = amf_.Add(worldTransform_.translation_, AproachVelocity_);
+	worldTransform_.translation_ = tmp;
+			if (worldTransform_.translation_.z < 0.0f) {
+				phase_ = 1;
+			}
 }

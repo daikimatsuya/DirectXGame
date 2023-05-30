@@ -20,13 +20,14 @@ public:
 	Vector3 GetWorldPosition();
 	const std::list<EnemyBullet*>& GetBullets() { return bullets_; }
 	void OnCollision();
-
+	void Approach();
+	void Leave();
 	static const int kInterval = 60;
 private:
-	enum Phase {
-		Approach,	//接近
-		Leave,		//離脱
-	};
+	//enum Phase {
+	//	Approach,	//接近
+	//	Leave,		//離脱
+	//};
 	WorldTransform worldTransform_;
 	Model* model_ = nullptr;
 	Player* player_ = nullptr;
@@ -35,8 +36,9 @@ private:
 	uint32_t textureHandle_ = 0;
 	AffineMatrixFunctions amf_;
 	VectorFanctions vf_;
-	Phase phase_ = Approach;
+	/*Phase phase_ = Approach;*/
 	std::list<EnemyBullet*> bullets_;
 	uint32_t intervalTimer = 0;
-
+	static void (Enemy::*MovePhase[])();
+	int phase_ = 0;
 };
