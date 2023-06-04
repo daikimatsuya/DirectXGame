@@ -11,6 +11,8 @@ GameScene::~GameScene() {
 	delete model_;
 	delete debugCamera_;
 	delete enemy_;
+	delete skydome_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -20,13 +22,17 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 	player_ = new Player();
 	enemy_ = new Enemy();
+	skydome_ = new Skydome();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	enemy_->SetPlayer(player_);
 	model_ = Model::Create();
 	viewPlojection_.Initialize();
 	textuerHandle_ = TextureManager::Load("picture/mario.png");
 	textureHandleEnemy_ = TextureManager::Load("picture/enemy.png");
+	textureHandleSkydome_ = TextureManager::Load("skydome/OIP.jpg");
 	player_->Initialize(model_,textuerHandle_);
 	enemy_->Initialize(model_, textureHandleEnemy_);
+	skydome_->Initialize(modelSkydome_, textureHandleSkydome_);
 	debugCamera_ = new DebugCamera(1280, 720);
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewPlojection_);
@@ -35,6 +41,7 @@ void GameScene::Initialize() {
 void GameScene::Update() { 
 	player_->Update(); 
 	enemy_->Update();
+	skydome_->Update();
 	GetAllColisions();
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -82,6 +89,7 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+	skydome_->Draw(viewPlojection_);
 	player_->Draw(viewPlojection_);
 	if (enemy_) {
 		enemy_->Draw(viewPlojection_);
