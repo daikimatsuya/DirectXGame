@@ -112,8 +112,8 @@ void Player::Attack() {
 
 Vector3 Player::GetWorldPosition() { 
 	Vector3 worldPos;
-	worldPos.x = worldTrasform_.translation_.x;
-	worldPos.y = worldTrasform_.translation_.y;
-	worldPos.z = worldTrasform_.translation_.z;
+	worldPos.x = worldTrasform_.matWorld_.m[3][0];
+	worldPos.y = worldTrasform_.matWorld_.m[3][1];
+	worldPos.z = worldTrasform_.matWorld_.m[3][2];
 	return worldPos;
 }
