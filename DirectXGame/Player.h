@@ -12,13 +12,14 @@ class Player {
 public:
 	Player();
 	~Player();
-	void Initialize(Model*model,uint32_t tectureHandle);
+	void Initialize(Model*model,uint32_t tectureHandle,Vector3 position);
 	void Update();
 	void Draw(ViewProjection viewProjection);
 	void Rotate();
 	void Attack();
 	Vector3 GetWorldPosition();
 	const std::list<PlayerBullet*>& GetBullets() { return bullets_; }
+	void Setparent(const WorldTransform* parent);
 	void OnCollision();
 
 private:

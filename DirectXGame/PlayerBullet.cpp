@@ -3,13 +3,13 @@
 #include "WorldTransform.h"
 #include "Model.h"
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position, const Vector3& velocity) {
+void PlayerBullet::Initialize(Model* model, const Matrix4x4& position, const Vector3& velocity) {
 	assert(model);
 	model_ = model;
 	velocity_ = velocity;
 	textureHandle_ = TextureManager::Load("picture/black.png");
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = position;
+	worldTransform_.translation_ = {position.m[3][0], position.m[3][1], position.m[3][2]};
 }
 
 void PlayerBullet::Update() { 

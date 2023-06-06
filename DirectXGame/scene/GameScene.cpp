@@ -2,7 +2,7 @@
 #include "TextureManager.h"
 #include <cassert>
 #include "AxisIndicator.h"
-
+#include "ImGuiManager.h"
 
 GameScene::GameScene() {}
 
@@ -13,16 +13,19 @@ GameScene::~GameScene() {
 	delete enemy_;
 	delete skydome_;
 	delete modelSkydome_;
+	delete railCamera_;
 }
 
 void GameScene::Initialize() {
-
+	worldTransform_.Initialize();
 	dxCommon_ = DirectXCommon::GetInstance();
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 	player_ = new Player();
 	enemy_ = new Enemy();
 	skydome_ = new Skydome();
+	railCamera_ = new RailCamera();
+	player_->Setparent(&railCamera_->GetWorldTransform());
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	enemy_->SetPlayer(player_);
 	model_ = Model::Create();
@@ -30,9 +33,11 @@ void GameScene::Initialize() {
 	textuerHandle_ = TextureManager::Load("picture/mario.png");
 	textureHandleEnemy_ = TextureManager::Load("picture/enemy.png");
 	textureHandleSkydome_ = TextureManager::Load("skydome/OIP.jpg");
-	player_->Initialize(model_,textuerHandle_);
+	Vector3 playerPosition = {0, 0, 40};
+	player_->Initialize(model_,textuerHandle_,playerPosition);
 	enemy_->Initialize(model_, textureHandleEnemy_);
 	skydome_->Initialize(modelSkydome_, textureHandleSkydome_);
+	railCamera_->Initialize(worldTransform_);
 	debugCamera_ = new DebugCamera(1280, 720);
 	AxisIndicator::GetInstance()->SetVisible(true);
 	AxisIndicator::GetInstance()->SetTargetViewProjection(&viewPlojection_);
@@ -42,6 +47,10 @@ void GameScene::Update() {
 	player_->Update(); 
 	enemy_->Update();
 	skydome_->Update();
+	railCamera_->Update();
+	viewPlojection_.matView = railCamera_->GetViewProjection().matView;
+	viewPlojection_.matProjection = railCamera_->GetViewProjection().matProjection;
+	viewPlojection_.TransferMatrix();
 	GetAllColisions();
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) {
@@ -58,9 +67,7 @@ void GameScene::Update() {
 		viewPlojection_.matProjection = debugCamera_->GetViewProjection().matProjection;
 		viewPlojection_.TransferMatrix();
 
-	} else {
-		viewPlojection_.UpdateMatrix();
-		}
+	}
 }
 
 void GameScene::Draw() {

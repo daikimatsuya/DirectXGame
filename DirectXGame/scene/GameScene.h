@@ -12,7 +12,7 @@
 #include "DebugCamera.h"
 #include "Enemy.h"
 #include "Skydome.h"
-
+#include "RailCamera.h"
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -53,6 +53,7 @@ private: // メンバ変数
 	Audio* audio_ = nullptr;
 	Player* player_ = nullptr;
 	Skydome* skydome_ = nullptr;
+	RailCamera* railCamera_ = nullptr;
 	Model* model_ = nullptr;
 	Model* modelSkydome_ = nullptr;
 	Enemy* enemy_ = nullptr;
@@ -61,7 +62,7 @@ private: // メンバ変数
 	uint32_t textureHandleSkydome_ = 0;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
-
+	WorldTransform worldTransform_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>

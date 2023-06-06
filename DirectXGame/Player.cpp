@@ -17,11 +17,12 @@ Player::~Player() {
 	}
 }
 
-void Player::Initialize(Model* model, uint32_t tectureHandle) {
+void Player::Initialize(Model* model, uint32_t tectureHandle,Vector3 position) {
 	assert(model);
 	model_ = model; 
 	tectureHandle_ = tectureHandle;
 	worldTrasform_.Initialize();
+	worldTrasform_.translation_ = position;
 	viewProjection_.Initialize();
 	input_ = Input::GetInstance();
 
@@ -105,7 +106,7 @@ void Player::Attack() {
 		Vector3 velocity(0, 0, kBulletSpeed);
 		velocity = AMF_->TransformNormal(velocity, worldTrasform_.matWorld_);
 		PlayerBullet* newBullet = new PlayerBullet();
-		newBullet->Initialize(model_, worldTrasform_.translation_,velocity);
+		newBullet->Initialize(model_, worldTrasform_.matWorld_,velocity);
 		bullets_.push_back(newBullet);
 	}
 }
@@ -116,4 +117,8 @@ Vector3 Player::GetWorldPosition() {
 	worldPos.y = worldTrasform_.matWorld_.m[3][1];
 	worldPos.z = worldTrasform_.matWorld_.m[3][2];
 	return worldPos;
+}
+
+void Player::Setparent(const WorldTransform* parent) { 
+	worldTrasform_.parent_ = parent; 
 }

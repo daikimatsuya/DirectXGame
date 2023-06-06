@@ -14,6 +14,9 @@ void WorldTransform::UpdateMatrix() {
 			afm.MakeRotateYMatrix(rotation_.y),
 	        afm.MakeRotateZMatrix(rotation_.z)),
 	    afm.MakeTranslateMatrix(translation_));
+	if (parent_) {
+		matWorld_ =afm.Multiply(matWorld_, parent_->matWorld_);
+	}
 
 	TransferMatrix();
 }
