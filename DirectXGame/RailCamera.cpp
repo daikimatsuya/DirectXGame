@@ -8,7 +8,7 @@ void RailCamera::Initialize(WorldTransform worldTransform) {
 	worldTransform_ = worldTransform;
 	rotate_ = worldTransform.rotation_;
 	viewProjection_.Initialize();
-	velocity_.z = -0.1f;
+	velocity_.z = -0.01f;
 	rotate_.z = 0.0f;
 }
 
@@ -16,7 +16,7 @@ void RailCamera::Update() { ;
 	Vector3 tmp = AMF_.Add(worldTransform_.translation_, velocity_);
 	worldTransform_.translation_ = tmp;
 	
-		Vector3 tmp2 = AMF_.Add(worldTransform_.rotation_, {0.0f, -0.005f, 0.0f});	
+		Vector3 tmp2 = AMF_.Add(worldTransform_.rotation_, {0.0f, -0.00f, 0.0f});	
 		worldTransform_.rotation_ = tmp2;
 	
 	worldTransform_.UpdateMatrix();

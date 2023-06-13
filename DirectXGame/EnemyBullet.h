@@ -20,7 +20,7 @@ private:
 	AffineMatrixFunctions amf_;
 	Model* model_ = nullptr;
 	uint32_t textureHandle_ = 0;
-	Vector3 velocity_;
+	Vector3 velocity_ = {};
 	static const int32_t klifeTimer = 60 * 5;
 	int32_t deathTimer_ = klifeTimer;
 	bool isdead_ = false;

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Audio.h"
 #include "DirectXCommon.h"
 #include "Input.h"
@@ -8,11 +7,13 @@
 #include "Sprite.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "Player.h"
 #include "DebugCamera.h"
-#include "Enemy.h"
 #include "Skydome.h"
 #include "RailCamera.h"
+
+class Enemy;
+class Player;
+class EnemyBullet;
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -46,6 +47,12 @@ public: // メンバ関数
 
 	void GetAllColisions();
 
+	void AddEnemyBullet(EnemyBullet* enemyBullet);
+	const std::list<EnemyBullet*>& GetBullets() { return enemyBullets_; }
+	void LoadEnemyPopData();
+	void UpdateEnemyPopCommands();
+	void CreateEnemy(Vector3 pos);
+
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	ViewProjection viewPlojection_;
@@ -56,13 +63,20 @@ private: // メンバ変数
 	RailCamera* railCamera_ = nullptr;
 	Model* model_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-	Enemy* enemy_ = nullptr;
+	//Enemy* enemy_=nullptr;
 	uint32_t textuerHandle_=0;
 	uint32_t textureHandleEnemy_ = 0;
 	uint32_t textureHandleSkydome_ = 0;
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
 	WorldTransform worldTransform_;
+	int intervalTimer;
+	bool waitFlag = false;
+	int32_t waitTimer;
+
+	std::list<EnemyBullet*> enemyBullets_;
+	std::stringstream enemyPopCommands;
+	std::list<Enemy*> enemys_;
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
