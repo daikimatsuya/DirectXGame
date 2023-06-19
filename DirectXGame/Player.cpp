@@ -22,8 +22,9 @@ void Player::Initialize(Model* model, uint32_t tectureHandle,Vector3 position) {
 	model_ = model; 
 	tectureHandle_ = tectureHandle;
 	worldTrasform_.Initialize();
+	worldTransform3DReticle_.Initialize();
 	worldTrasform_.translation_ = position;
-	viewProjection_.Initialize();
+	//viewProjection_.Initialize();
 	input_ = Input::GetInstance();
 
 }
@@ -62,13 +63,24 @@ void Player::Update() {
 	worldTrasform_.translation_.y = inputFloat[1];
 	worldTrasform_.translation_.z = inputFloat[2];
 
-	worldTrasform_.translation_.x = max(worldTrasform_.translation_.x, -MoveLimitX);
-	worldTrasform_.translation_.x = min(worldTrasform_.translation_.x, +MoveLimitX);
-	worldTrasform_.translation_.y = max(worldTrasform_.translation_.y, -MoveLimitY);
-	worldTrasform_.translation_.y = min(worldTrasform_.translation_.y, +MoveLimitY);
 
+	worldTrasform_.translation_.x =
+	    std::clamp(worldTrasform_.translation_.x, -MoveLimitX, MoveLimitX);
 
+	worldTrasform_.translation_.y =
+	    std::clamp(worldTrasform_.translation_.y, -MoveLimitY, MoveLimitY);
+	
 	worldTrasform_.UpdateMatrix();
+
+
+	const float kDistancePlayerTo3DReticle = 25.0f;
+	Vector3 offset = {0, 0, 0.1f};
+	offset = MF_->TransformNormal(offset, worldTrasform_.matWorld_);
+	offset = VF_->Multiply(VF_->Normalize(offset), kDistancePlayerTo3DReticle);
+	worldTransform3DReticle_.translation_ = VF_->Add(GetWorldPosition(), offset);
+	worldTransform3DReticle_.UpdateMatrix();
+
+
 	bullets_.remove_if([](PlayerBullet* bullet) { 
 		if (bullet->Isdead()) {
 			delete bullet;
@@ -82,9 +94,9 @@ void Player::Update() {
 	}
 }
 
-void Player::Draw(ViewProjection viewProjection) { 
-	viewProjection_ = viewProjection;
-	model_->Draw(worldTrasform_, viewProjection_, tectureHandle_);
+void Player::Draw(const ViewProjection& viewProjection) { 
+	model_->Draw(worldTransform3DReticle_, viewProjection, tectureHandle_);
+	model_->Draw(worldTrasform_, viewProjection, tectureHandle_);
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(viewProjection);
 	}
@@ -103,8 +115,9 @@ void Player::Rotate() {
 void Player::Attack() { 
 	if (input_->TriggerKey(DIK_Z)) {
 		const float kBulletSpeed = 1.0f;
-		Vector3 velocity(0, 0, kBulletSpeed);
-		velocity = AMF_->TransformNormal(velocity, worldTrasform_.matWorld_);
+		Vector3 velocity =VF_->Subtract(worldTransform3DReticle_.translation_, GetWorldPosition());
+		velocity = VF_->Multiply(VF_->Normalize(velocity), kBulletSpeed);
+		//velocity = AMF_->TransformNormal(velocity, worldTrasform_.matWorld_);
 		PlayerBullet* newBullet = new PlayerBullet();
 		newBullet->Initialize(model_, worldTrasform_.matWorld_,velocity);
 		bullets_.push_back(newBullet);

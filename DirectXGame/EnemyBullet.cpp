@@ -23,7 +23,7 @@ void EnemyBullet::Update() {
 	}
 }
 
-void EnemyBullet::Draw(const ViewProjection viewProjection) {
+void EnemyBullet::Draw(const ViewProjection& viewProjection) {
 	model_->Draw(worldTransform_, viewProjection, textureHandle_);
 }
 

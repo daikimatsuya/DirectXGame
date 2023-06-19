@@ -9,7 +9,7 @@ public:
 	~EnemyBullet();
 	void Initialize(Model* model,const Vector3 position,const Vector3 velocity);
 	void Update();
-	void Draw(const ViewProjection viewProjection);
+	void Draw(const ViewProjection& viewProjection);
 	Vector3 GetWorldPosition();
 	bool Isdead() const { return isdead_; }
 	void OnCollision();

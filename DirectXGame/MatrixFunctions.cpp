@@ -81,6 +81,27 @@ Matrix4x4 MatrixFunctions::Multiply(const Matrix4x4& m1, const Matrix4x4& m2)
 	return tmp;
 }
 
+Vector3 MatrixFunctions::Multiply(const Vector3 v, const Matrix4x4 m) { 
+	Vector3 tmp;
+	Vector4 tmp2 = {v.x,v.y,v.z,1};
+	tmp.x = tmp2.x * m.m[0][0] + tmp2.y * m.m[1][0] + tmp2.z * m.m[2][0] +
+	             tmp2.w * m.m[3][0];
+	tmp.y = tmp2.x * m.m[0][1] + tmp2.y * m.m[1][1] + tmp2.z * m.m[2][1] +
+	             tmp2.w * m.m[3][1];
+	tmp.z =	tmp2.x * m.m[0][2] + tmp2.y * m.m[1][2] + tmp2.z * m.m[2][2] +
+	             tmp2.w * m.m[3][2];
+	
+	return tmp; 
+}
+
+Vector3 MatrixFunctions::TransformNormal(const Vector3& v, const Matrix4x4& m) {
+	Vector3 tmp{	 v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0],
+						 v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1],
+						 v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2],
+	};
+	return tmp;
+}
+
 Matrix4x4 MatrixFunctions::Inverse(const Matrix4x4& m) {
 	Matrix4x4 tmp;
 	float A_;
